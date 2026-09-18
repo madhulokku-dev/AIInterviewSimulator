@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Interview Setup</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>🎯 Interview Setup</h1>
+
+        <form action="/interview" method="POST">
+
+            <label>Your Name</label>
+            <br>
+            <input type="text" name="name" placeholder="Enter your name" required>
+
+            <br><br>
+
+            <label>Choose Job Role</label>
+            <br>
+            <select name="role" required>
+                <option value="">Select Role</option>
+                <option value="Software Developer">Software Developer</option>
+                <option value="Data Analyst">Data Analyst</option>
+                <option value="Frontend Developer">Frontend Developer</option>
+                <option value="Python Developer">Python Developer</option>
+                <option value="Java Developer">Java Developer</option>
+            </select>
+
+            <br><br>
+
+            <label>Difficulty</label>
+            <br>
+            <select name="difficulty">
+                <option value="Easy">Easy</option>
+                <option value="Medium">Medium</option>
+                <option value="Hard">Hard</option>
+            </select>
+
+            <br><br>
+
+            <label>Number of Questions</label>
+            <br>
+            <select name="questions">
+                <option value="5">5 Questions</option>
+                <option value="10">10 Questions</option>
+            </select>
+
+            <br><br>
+
+            <button type="submit">Start Interview 🚀</button>
+
+        </form>
+
+    </div>
+
+</body>
+</html>

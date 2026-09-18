@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Interview Result</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <h1>🎉 Interview Completed!</h1>
+
+
+    <h2>Your Performance Report</h2>
+
+
+    <div class="score">
+
+        <h1>{{ overall_score }} / 100</h1>
+
+        <p>Overall Score</p>
+
+    </div>
+
+
+    <hr>
+
+
+    <h2>📊 Answer Scores</h2>
+
+
+    {% for score in answer_scores %}
+
+        <p>
+            Question {{ loop.index }}:
+            <strong>{{ score }} / 100</strong>
+        </p>
+
+    {% endfor %}
+
+
+    <hr>
+
+
+    <h2>🤖 Interview Feedback</h2>
+
+
+    <p>
+        {{ feedback }}
+    </p>
+
+
+    <h3>📈 How to Improve</h3>
+
+
+    <ul>
+
+        <li>Give detailed answers.</li>
+
+        <li>Use practical examples.</li>
+
+        <li>Explain technical concepts clearly.</li>
+
+        <li>Avoid extremely short answers.</li>
+
+    </ul>
+
+
+    <br>
+
+
+    <a href="/">
+
+        <button>
+            🏠 Back to Home
+        </button>
+
+    </a>
+
+
+</div>
+
+
+</body>
+
+</html>

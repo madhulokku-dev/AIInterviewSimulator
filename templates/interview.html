@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Interview Simulator</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        .interview-layout {
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .interview-box {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .camera-box {
+            width: 350px;
+            text-align: center;
+            padding: 20px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        #camera {
+            width: 100%;
+            max-width: 350px;
+            height: 260px;
+            object-fit: cover;
+            border-radius: 15px;
+            background: #111;
+        }
+
+        .timer {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        .progress {
+            margin: 15px 0;
+        }
+
+        .status-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        .status {
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .status-off {
+            background: #333;
+            color: white;
+        }
+
+        .status-on {
+            background: #1f9d55;
+            color: white;
+        }
+
+        .voice-status {
+            margin: 12px 0;
+            font-weight: bold;
+        }
+
+        .listening {
+            color: #d62828;
+        }
+
+        .camera-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .voice-button {
+            margin-top: 10px;
+        }
+
+        .camera-note {
+            font-size: 13px;
+            opacity: 0.8;
+            margin-top: 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🤖 AI Interview Simulator</h1>
+
+    <p>
+        Welcome, <strong>{{ name }}</strong>!
+    </p>
+
+    <p>
+        Role: <strong>{{ role }}</strong>
+        |
+        Difficulty: <strong>{{ difficulty }}</strong>
+    </p>
+
+    <div class="interview-layout">
+
+        <!-- INTERVIEW SECTION -->
+
+        <div class="interview-box">
+
+            <p class="progress">
+                Question
+                <span id="questionNumber">1</span>
+                of
+                <span id="totalQuestions">
+                    {{ questions|length }}
+                </span>
+            </p>
+
+            <div class="question-box">
+                <h2 id="question">
+                    {{ questions[0] }}
+                </h2>
+            </div>
+
+            <div class="timer">
+                ⏱️ Time:
+                <span id="timer">60</span>s
+            </div>
+
+            <textarea
+                id="answer"
+                placeholder="Type your answer here or use the microphone..."
+                rows="6"></textarea>
+
+            <div class="voice-status" id="voiceStatus">
+                🎤 Microphone ready
+            </div>
+
+            <button
+                class="voice-button"
+                id="voiceButton"
+                onclick="startVoiceAnswer()">
+                🎤 Speak Answer
+            </button>
+
+            <br><br>
+
+            <button onclick="nextQuestion()">
+                Next Question ➡️
+            </button>
+
+        </div>
+
+
+        <!-- CAMERA SECTION -->
+
+        <div class="camera-box">
+
+            <h2>🎥 Interview Camera</h2>
+
+            <video
+                id="camera"
+                autoplay
+                playsinline>
+            </video>
+
+            <div class="status-container">
+
+                <span
+                    id="cameraStatus"
+                    class="status status-off">
+                    🔴 Camera OFF
+                </span>
+
+                <span
+                    id="micStatus"
+                    class="status status-off">
+                    🔴 Mic OFF
+                </span>
+
+            </div>
+
+            <div class="camera-buttons">
+
+                <button onclick="startCamera()">
+                    📷 Start Camera
+                </button>
+
+                <button onclick="stopCamera()">
+                    🛑 Stop Camera
+                </button>
+
+            </div>
+
+            <p class="camera-note">
+                Camera preview is not recorded or saved.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Hidden form for sending results -->
+
+<form
+    id="resultForm"
+    action="/result"
+    method="POST">
+
+    <div id="hiddenData"></div>
+
+</form>
+
+
+<script>
+
+// ==================================================
+// QUESTIONS
+// ==================================================
+
+const questions = {{ questions | tojson }};
+
+let currentQuestion = 0;
+
+let answers = [];
+
+
+// ==================================================
+// TIMER
+// ==================================================
+
+let timeLeft = 60;
+
+let timerInterval;
+
+
+function startTimer() {
+
+    clearInterval(timerInterval);
+
+    timeLeft = 60;
+
+    document.getElementById("timer").innerText =
+        timeLeft;
+
+    timerInterval = setInterval(function () {
+
+        timeLeft--;
+
+        document.getElementById("timer").innerText =
+            timeLeft;
+
+        if (timeLeft <= 0) {
+
+            clearInterval(timerInterval);
+
+            alert("⏰ Time's up!");
+
+            nextQuestion();
+
+        }
+
+    }, 1000);
+}
+
+
+// ==================================================
+// NEXT QUESTION
+// ==================================================
+
+function nextQuestion() {
+
+    const answer =
+        document.getElementById("answer").value.trim();
+
+
+    if (answer === "") {
+
+        alert("Please enter or speak your answer.");
+
+        return;
+
+    }
+
+
+    answers.push(answer);
+
+    currentQuestion++;
+
+
+    // INTERVIEW FINISHED
+
+    if (currentQuestion >= questions.length) {
+
+        clearInterval(timerInterval);
+
+
+        const hiddenData =
+            document.getElementById("hiddenData");
+
+
+        // Send questions
+
+        questions.forEach(function(question) {
+
+            const input =
+                document.createElement("input");
+
+            input.type = "hidden";
+
+            input.name = "questions";
+
+            input.value = question;
+
+            hiddenData.appendChild(input);
+
+        });
+
+
+        // Send answers
+
+        answers.forEach(function(answer) {
+
+            const input =
+                document.createElement("input");
+
+            input.type = "hidden";
+
+            input.name = "answers";
+
+            input.value = answer;
+
+            hiddenData.appendChild(input);
+
+        });
+
+
+        document.getElementById("resultForm").submit();
+
+        return;
+
+    }
+
+
+    // SHOW NEXT QUESTION
+
+    document.getElementById("questionNumber").innerText =
+        currentQuestion + 1;
+
+    document.getElementById("question").innerText =
+        questions[currentQuestion];
+
+    document.getElementById("answer").value = "";
+
+    document.getElementById("voiceStatus").innerText =
+        "🎤 Microphone ready";
+
+    document.getElementById("voiceStatus").className =
+        "voice-status";
+
+    startTimer();
+
+}
+
+
+// ==================================================
+// CAMERA
+// ==================================================
+
+let cameraStream = null;
+
+
+async function startCamera() {
+
+    try {
+
+        cameraStream =
+            await navigator.mediaDevices.getUserMedia({
+
+                video: true,
+
+                audio: true
+
+            });
+
+
+        document.getElementById("camera").srcObject =
+            cameraStream;
+
+
+        document.getElementById("cameraStatus").innerText =
+            "🟢 Camera ON";
+
+        document.getElementById("cameraStatus").className =
+            "status status-on";
+
+
+        document.getElementById("micStatus").innerText =
+            "🟢 Mic ON";
+
+        document.getElementById("micStatus").className =
+            "status status-on";
+
+    }
+
+    catch (error) {
+
+        alert(
+            "Please allow camera and microphone access."
+        );
+
+        console.log(error);
+
+    }
+
+}
+
+
+// ==================================================
+// STOP CAMERA
+// ==================================================
+
+function stopCamera() {
+
+    if (cameraStream) {
+
+        cameraStream
+            .getTracks()
+            .forEach(track => track.stop());
+
+        document.getElementById("camera").srcObject =
+            null;
+
+        cameraStream = null;
+
+    }
+
+
+    document.getElementById("cameraStatus").innerText =
+        "🔴 Camera OFF";
+
+    document.getElementById("cameraStatus").className =
+        "status status-off";
+
+
+    document.getElementById("micStatus").innerText =
+        "🔴 Mic OFF";
+
+    document.getElementById("micStatus").className =
+        "status status-off";
+
+}
+
+
+// ==================================================
+// VOICE ANSWER
+// ==================================================
+
+let recognition = null;
+
+let isListening = false;
+
+
+// Check browser support
+
+const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+
+if (SpeechRecognition) {
+
+    recognition = new SpeechRecognition();
+
+    recognition.continuous = false;
+
+    recognition.interimResults = true;
+
+    recognition.lang = "en-IN";
+
+
+    recognition.onstart = function () {
+
+        isListening = true;
+
+        document.getElementById("voiceStatus").innerText =
+            "🔴 Listening... Speak now";
+
+        document.getElementById("voiceStatus").className =
+            "voice-status listening";
+
+        document.getElementById("voiceButton").innerText =
+            "🛑 Stop Speaking";
+
+    };
+
+
+    recognition.onresult = function (event) {
+
+        let finalText = "";
+
+        let interimText = "";
+
+
+        for (
+            let i = event.resultIndex;
+            i < event.results.length;
+            i++
+        ) {
+
+            const transcript =
+                event.results[i][0].transcript;
+
+
+            if (event.results[i].isFinal) {
+
+                finalText += transcript;
+
+            } else {
+
+                interimText += transcript;
+
+            }
+
+        }
+
+
+        const answerBox =
+            document.getElementById("answer");
+
+
+        if (finalText) {
+
+            if (answerBox.value.trim() !== "") {
+
+                answerBox.value += " " + finalText;
+
+            } else {
+
+                answerBox.value = finalText;
+
+            }
+
+        }
+
+    };
+
+
+    recognition.onend = function () {
+
+        isListening = false;
+
+        document.getElementById("voiceStatus").innerText =
+            "🎤 Microphone ready";
+
+        document.getElementById("voiceStatus").className =
+            "voice-status";
+
+        document.getElementById("voiceButton").innerText =
+            "🎤 Speak Answer";
+
+    };
+
+
+    recognition.onerror = function (event) {
+
+        console.log("Speech error:", event.error);
+
+        isListening = false;
+
+        document.getElementById("voiceStatus").innerText =
+            "⚠️ Could not recognize speech";
+
+        document.getElementById("voiceStatus").className =
+            "voice-status";
+
+        document.getElementById("voiceButton").innerText =
+            "🎤 Speak Answer";
+
+    };
+
+}
+
+
+// Start / stop voice recognition
+
+function startVoiceAnswer() {
+
+    if (!recognition) {
+
+        alert(
+            "Voice recognition is not supported in this browser. Please try Google Chrome."
+        );
+
+        return;
+
+    }
+
+
+    if (isListening) {
+
+        recognition.stop();
+
+        return;
+
+    }
+
+
+    try {
+
+        recognition.start();
+
+    }
+
+    catch (error) {
+
+        console.log(error);
+
+    }
+
+}
+
+
+// ==================================================
+// START TIMER
+// ==================================================
+
+startTimer();
+
+</script>
+
+</body>
+</html>
