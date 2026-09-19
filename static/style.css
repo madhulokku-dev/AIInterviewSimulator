@@ -1,0 +1,526 @@
+```css
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+}
+
+body {
+    min-height: 100vh;
+
+    font-family: "Segoe UI", Arial, sans-serif;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0f172a 0%,
+            #172554 45%,
+            #f009ab 100%
+        );
+
+    color: #172033;
+}
+
+
+/* =====================================
+   PAGE CENTER
+===================================== */
+
+.page-center {
+    width: 100%;
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 45px 25px;
+}
+
+
+/* =====================================
+   MAIN CARD
+===================================== */
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+
+    padding: 45px;
+
+    background: #ffffff;
+
+    border-radius: 28px;
+
+    box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.35);
+
+    text-align: center;
+}
+
+
+/* =====================================
+   MAIN HEADING
+===================================== */
+
+.container > h1 {
+    margin: 0 0 12px;
+
+    font-size: 42px;
+
+    font-weight: 800;
+
+    letter-spacing: -1px;
+
+    color: #111827;
+}
+
+
+.container > p {
+    margin: 8px 0;
+
+    font-size: 18px;
+
+    color: #64748b;
+}
+
+
+.container > p strong {
+    color: #1e3a8a;
+}
+
+
+/* =====================================
+   INTERVIEW LAYOUT
+===================================== */
+
+.interview-layout {
+    width: 100%;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: stretch;
+
+    gap: 35px;
+
+    margin: 40px auto 10px;
+}
+
+
+/* =====================================
+   QUESTION CARD
+===================================== */
+
+.interview-box {
+    width: 58%;
+
+    padding: 30px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 22px;
+
+    text-align: center;
+
+    box-shadow:
+        0 10px 30px rgba(15, 23, 42, 0.08);
+}
+
+
+/* =====================================
+   PROGRESS
+===================================== */
+
+.progress {
+    margin: 0 0 20px;
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+    color: #475569;
+}
+
+
+#questionNumber {
+    color: #4f46e5;
+
+    font-size: 22px;
+}
+
+
+#totalQuestions {
+    color: #4f46e5;
+
+    font-size: 22px;
+}
+
+
+/* =====================================
+   QUESTION
+===================================== */
+
+.question-box {
+    width: 100%;
+
+    min-height: 145px;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    margin: 20px auto;
+
+    padding: 30px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #eef2ff,
+            #f5f3ff
+        );
+
+    border-radius: 18px;
+
+    border-left: 6px solid #4f46e5;
+}
+
+
+.question-box h2 {
+    margin: 0;
+
+    font-size: 28px;
+
+    line-height: 1.4;
+
+    font-weight: 750;
+
+    color: #1e293b;
+}
+
+
+/* =====================================
+   TIMER
+===================================== */
+
+.timer {
+    margin: 22px 0;
+
+    font-size: 22px;
+
+    font-weight: 700;
+
+    color: #334155;
+}
+
+
+#timer {
+    color: #dc2626;
+
+    font-size: 30px;
+
+    font-weight: 800;
+}
+
+
+/* =====================================
+   TEXT AREA
+===================================== */
+
+textarea {
+    width: 100%;
+
+    min-height: 170px;
+
+    padding: 20px;
+
+    resize: vertical;
+
+    border: 2px solid #e2e8f0;
+
+    border-radius: 16px;
+
+    background: #ffffff;
+
+    color: #1e293b;
+
+    font-family: "Segoe UI", Arial, sans-serif;
+
+    font-size: 18px;
+
+    line-height: 1.6;
+
+    outline: none;
+
+    transition: 0.2s;
+}
+
+
+textarea::placeholder {
+    color: #94a3b8;
+}
+
+
+textarea:focus {
+    border-color: #ed09b8;
+
+    box-shadow:
+        0 0 0 4px rgba(99, 102, 241, 0.12);
+}
+
+
+/* =====================================
+   VOICE STATUS
+===================================== */
+
+.voice-status {
+    margin: 16px 0;
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    color: #fd07e9;
+}
+
+
+.listening {
+    color: #dc2626;
+}
+
+
+/* =====================================
+   BUTTONS
+===================================== */
+
+button {
+    padding: 14px 24px;
+
+    margin: 6px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            hsl(189, 74%, 29%),
+            #76048d
+        );
+
+    color: white;
+
+    font-family: "Segoe UI", Arial, sans-serif;
+
+    font-size: 16px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 6px 15px rgba(240, 5, 150, 0.25);
+
+    transition: all 0.2s ease;
+}
+
+
+button:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 22px rgba(79, 70, 229, 0.3);
+}
+
+
+button:active {
+    transform: translateY(0);
+}
+
+
+/* =====================================
+   CAMERA CARD
+===================================== */
+
+.camera-box {
+    width: 42%;
+
+    padding: 30px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 22px;
+
+    text-align: center;
+
+    box-shadow:
+        0 10px 30px rgba(15, 23, 42, 0.08);
+}
+
+
+.camera-box h2 {
+    margin-top: 0;
+
+    margin-bottom: 20px;
+
+    font-size: 26px;
+
+    font-weight: 750;
+
+    color: #1e293b;
+}
+
+
+/* =====================================
+   CAMERA
+===================================== */
+
+#camera {
+    width: 100%;
+
+    height: 300px;
+
+    object-fit: cover;
+
+    border-radius: 18px;
+
+    background: #dd099d;
+
+    border: 3px solid #cbd5e1;
+}
+
+
+/* =====================================
+   STATUS
+===================================== */
+
+.status-container {
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    gap: 10px;
+
+    margin: 20px 0;
+
+    flex-wrap: wrap;
+}
+
+
+.status {
+    padding: 8px 15px;
+
+    border-radius: 30px;
+
+    font-size: 14px;
+
+    font-weight: 700;
+}
+
+
+.status-off {
+    background: #e2e8f0;
+
+    color: #475569;
+}
+
+
+.status-on {
+    background: #dcfce7;
+
+    color: #15803d;
+}
+
+
+/* =====================================
+   CAMERA BUTTONS
+===================================== */
+
+.camera-buttons {
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 8px;
+
+    flex-wrap: wrap;
+}
+
+
+/* =====================================
+   CAMERA NOTE
+===================================== */
+
+.camera-note {
+    margin-top: 15px;
+
+    font-size: 14px;
+
+    color: #64748b;
+}
+
+
+/* =====================================
+   MOBILE
+===================================== */
+
+@media (max-width: 950px) {
+
+    .page-center {
+        padding: 25px 15px;
+
+        align-items: flex-start;
+    }
+
+
+    .container {
+        padding: 30px 20px;
+    }
+
+
+    .container > h1 {
+        font-size: 34px;
+    }
+
+
+    .interview-layout {
+        flex-direction: column;
+
+        align-items: center;
+
+        gap: 25px;
+    }
+
+
+    .interview-box,
+    .camera-box {
+        width: 100%;
+
+        max-width: 700px;
+    }
+
+
+    .question-box h2 {
+        font-size: 23px;
+    }
+
+
+    #camera {
+        height: 280px;
+    }
+}
